@@ -1,170 +1,170 @@
-# Телеграм-бот для поиска попутчиков
+# Telegram Carpooling Bot
 
-Этот Телеграм-бот облегчает совместные поездки, соединяя водителей и пассажиров. Он позволяет водителям создавать маршруты, пассажирам присоединяться к доступным маршрутам, а администраторам управлять пользователями и контролировать активность.
+This Telegram bot facilitates carpooling by connecting drivers and passengers. It allows drivers to create routes, passengers to join available routes, and administrators to manage users and monitor activity.
 
-## Функции
+## Features
 
-- **Функциональность для водителей**:
-  - Создание маршрута путем отправки текущего местоположения или ввода адреса.
-  - Принятие запросов пассажиров на присоединение к маршруту.
-  - Получение оптимизированных предложений маршрута с использованием Google Maps API.
-  - Обмен живым местоположением для обновления расчетного времени прибытия (ETA) для пассажиров.
+- **Driver Functionality**:
+  - Create routes by sending current location or entering an address
+  - Accept passenger requests to join routes
+  - Receive optimized route suggestions using Google Maps API
+  - Share live location to update estimated time of arrival (ETA) for passengers
 
-- **Функциональность для пассажиров**:
-  - Присоединение к доступным маршрутам путем отправки текущего местоположения или ввода адреса.
-  - Получение уведомлений о расчетном времени прибытия водителя.
-  - Обращение в поддержку за помощью.
+- **Passenger Functionality**:
+  - Join available routes by sending current location or entering an address
+  - Receive notifications about driver's estimated arrival time
+  - Contact support for assistance
 
-- **Функциональность для администраторов**:
-  - Управление пользователями путем добавления или удаления их из белого списка.
-  - Просмотр и управление всеми активными маршрутами.
-  - Ответ на тикеты поддержки и изменение их статусов.
-  - Рассылка сообщений всем пользователям.
-  - Создание отчетов о тикетах и маршрутах.
+- **Administrator Functionality**:
+  - Manage users by adding or removing them from the whitelist
+  - View and manage all active routes
+  - Respond to support tickets and change their statuses
+  - Broadcast messages to all users
+  - Generate reports on tickets and routes
 
-## Содержание
+## Table of Contents
 
-- [Установка](#установка)
-- [Конфигурация](#конфигурация)
-- [Использование](#использование)
-- [Команды](#команды)
-- [Структура проекта](#структура-проекта)
-- [Зависимости](#зависимости)
-- [Лицензия](#лицензия)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Commands](#commands)
+- [Project Structure](#project-structure)
+- [Dependencies](#dependencies)
+- [License](#license)
 
-## Установка
+## Installation
 
-1. **Клонируйте репозиторий**:
+1. **Clone the repository**:
 
    ```bash
    git clone https://github.com/yourusername/telegram-carpooling-bot.git
    cd telegram-carpooling-bot
    ```
 
-2. **Создайте виртуальное окружение** (необязательно, но рекомендуется):
+2. **Create a virtual environment** (optional but recommended):
 
    ```bash
    python -m venv venv
-   source venv/bin/activate  # В Windows используйте `venv\Scripts\activate`
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
    ```
 
-3. **Установите необходимые пакеты**:
+3. **Install required packages**:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Настройте переменные окружения**:
+4. **Set up environment variables**:
 
-   Создайте файл `.env` в корневой директории проекта и добавьте следующие переменные:
+   Create a `.env` file in the root directory of the project and add the following variables:
 
    ```env
-   TELEGRAM_BOT_TOKEN=ВАШ_TELEGRAM_BOT_TOKEN
-   GOOGLE_MAPS_API_KEY=ВАШ_GOOGLE_MAPS_API_KEY
+   TELEGRAM_BOT_TOKEN=YOUR_TELEGRAM_BOT_TOKEN
+   GOOGLE_MAPS_API_KEY=YOUR_GOOGLE_MAPS_API_KEY
    ```
 
-   Замените `ВАШ_TELEGRAM_BOT_TOKEN` и `ВАШ_GOOGLE_MAPS_API_KEY` на ваши реальные токены.
+   Replace `YOUR_TELEGRAM_BOT_TOKEN` and `YOUR_GOOGLE_MAPS_API_KEY` with your actual tokens.
 
-   - **Telegram Bot Token**: Получите, создав нового бота через [BotFather](https://telegram.me/BotFather) в Телеграме.
-   - **Google Maps API Key**: Сгенерируйте в [Google Cloud Console](https://console.cloud.google.com/). Убедитесь, что следующие API включены:
+   - **Telegram Bot Token**: Obtain by creating a new bot via [BotFather](https://telegram.me/BotFather) on Telegram
+   - **Google Maps API Key**: Generate in [Google Cloud Console](https://console.cloud.google.com/). Make sure the following APIs are enabled:
      - Geocoding API
      - Distance Matrix API
      - Directions API
 
-## Конфигурация
+## Configuration
 
-- **Установите пароли ролей**:
+- **Set role passwords**:
 
-  В файле `main.py` настройте словарь `ROLE_PASSWORDS`, чтобы установить пароли для разных ролей пользователей:
+  In the `main.py` file, configure the `ROLE_PASSWORDS` dictionary to set passwords for different user roles:
 
   ```python
   ROLE_PASSWORDS = {
-      'администратор': 'ВашПарольАдминистратора',
-      'водитель': 'ВашПарольВодителя',
-      'пассажир': 'ВашПарольПассажира'
+      'administrator': 'YourAdminPassword',
+      'driver': 'YourDriverPassword',
+      'passenger': 'YourPassengerPassword'
   }
   ```
 
-- **Установите ID главного администратора**:
+- **Set main administrator ID**:
 
-  Замените `MAIN_ADMIN_ID` на ваш Telegram ID:
-
-  ```python
-  MAIN_ADMIN_ID = ВАШ_TELEGRAM_ID
-  ```
-
-  Вы можете узнать свой Telegram ID, используя ботов, таких как [UserInfoBot](https://telegram.me/userinfobot).
-
-- **Местоположение рабочего места**:
-
-  Установите координаты пункта назначения (рабочего места):
+  Replace `MAIN_ADMIN_ID` with your Telegram ID:
 
   ```python
-  workplace_location = "широта,долгота"
+  MAIN_ADMIN_ID = YOUR_TELEGRAM_ID
   ```
 
-## Использование
+  You can find your Telegram ID using bots like [UserInfoBot](https://telegram.me/userinfobot).
 
-Запустите бота, используя следующую команду:
+- **Workplace location**:
+
+  Set the coordinates of the destination point (workplace):
+
+  ```python
+  workplace_location = "latitude,longitude"
+  ```
+
+## Usage
+
+Run the bot using the following command:
 
 ```bash
 python main.py
 ```
 
-Бот начнет опрашивать обновления. Пользователи могут взаимодействовать с ботом через Телеграм.
+The bot will start polling for updates. Users can interact with the bot through Telegram.
 
-## Команды
+## Commands
 
-### Общие команды
+### General Commands
 
-- `/start` - Начать взаимодействие с ботом и выбрать роль.
-- `/login` - Войти под другой ролью.
+- `/start` - Start interacting with the bot and select a role
+- `/login` - Log in with a different role
 
-### Команды для водителей
+### Driver Commands
 
-- `/finish` - Завершить сбор пассажиров и получить оптимизированный маршрут.
-- `/show_eta` - Показать расчетное время прибытия к каждому пассажиру.
+- `/finish` - Finish collecting passengers and get optimized route
+- `/show_eta` - Show estimated time of arrival to each passenger
 
-### Команды для администраторов
+### Administrator Commands
 
-- `/help` - Показать доступные команды администратора.
-- `/list_routes` - Показать все текущие маршруты.
-- `/broadcast` - Отправить сообщение всем пользователям.
-- `/add_user` - Добавить пользователя в белый список.
-- `/remove_user` - Удалить пользователя из белого списка.
-- `/view_tickets` - Просмотреть тикеты поддержки.
-- `/reports` - Создать отчет о тикетах и маршрутах.
+- `/help` - Show available administrator commands
+- `/list_routes` - Show all current routes
+- `/broadcast` - Send a message to all users
+- `/add_user` - Add a user to the whitelist
+- `/remove_user` - Remove a user from the whitelist
+- `/view_tickets` - View support tickets
+- `/reports` - Generate report on tickets and routes
 
-## Структура проекта
+## Project Structure
 
-- **`main.py`**: Главный скрипт, содержащий всю логику бота и обработчики.
-- **`bot_activity.log`**: Файл журнала активности бота.
-- **`whitelist.json`**: JSON-файл, хранящий ID пользователей в белом списке.
-- **`tickets.json`**: JSON-файл, хранящий тикеты поддержки.
-- **`encryption_key.key`**: Файл, хранящий ключ шифрования для конфиденциальных данных.
+- **`main.py`**: Main script containing all bot logic and handlers
+- **`bot_activity.log`**: Bot activity log file
+- **`whitelist.json`**: JSON file storing whitelisted user IDs
+- **`tickets.json`**: JSON file storing support tickets
+- **`encryption_key.key`**: File storing encryption key for sensitive data
 
-## Зависимости
+## Dependencies
 
 - **Python 3.7+**
-- **Библиотеки**:
-  - `python-telegram-bot`: Библиотека Telegram Bot API.
-  - `googlemaps`: Клиент для Google Maps API.
-  - `python-dotenv`: Загрузка переменных окружения из `.env`.
-  - `cryptography`: Для шифрования конфиденциальных данных.
-  - `uuid`, `datetime`, `json`, `logging`: Стандартные библиотеки Python.
+- **Libraries**:
+  - `python-telegram-bot`: Telegram Bot API library
+  - `googlemaps`: Google Maps API client
+  - `python-dotenv`: Load environment variables from `.env`
+  - `cryptography`: For encrypting sensitive data
+  - `uuid`, `datetime`, `json`, `logging`: Standard Python libraries
 
-Установите зависимости, используя:
+Install dependencies using:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-**Примечание**: Убедитесь, что вы используете версию `pip`, совместимую с вашей версией Python.
+**Note**: Make sure you're using a `pip` version compatible with your Python version.
 
-## Лицензия
+## License
 
-Этот проект лицензирован по лицензии MIT. Подробности смотрите в файле [LICENSE](LICENSE).
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
-**Отказ от ответственности**: Этот бот предназначен для образовательных целей. Убедитесь в соблюдении всех соответствующих законов и правил при развертывании и использовании этого бота.
+**Disclaimer**: This bot is intended for educational purposes. Make sure to comply with all relevant laws and regulations when deploying and using this bot.
